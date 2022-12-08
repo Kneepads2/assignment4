@@ -6,8 +6,9 @@ import time
 data = {}
 #filewrite = open("resourceData.json","w")
 #filewrite.write("ID\t\tName\t\tOccupation\t\tSalary\t\tAge\t\tEmployment Status\t\t\n")
+fileread = open("resourceData.json","r")
 #filewrite.close()
-#fileread = open("resourceData.json","r")
+
 counter = 0
 class Create:
     name=""
@@ -65,11 +66,11 @@ class Create:
                 print("Please enter if they are a full-time, part-time or a contractor.\n")
         id = 0
         global data
-        data = {"employee":{'name':name,'occupation':occupation,'salary':salary,'age':age,'workstatus':workstatus,'id':id}}
+        data = {'employee':{'name':name,'occupation':occupation,'salary':salary,'age':age,'workstatus':workstatus,'id':id}}
         
         with open ('resourceData.json','a') as f:
             json.dump(data,f)
-            f.write(",\n")
+            f.write("\n")
             
         print("\nResource created. Sending you back to the main menu...\n======================================================")
         time.sleep(2)
@@ -79,15 +80,23 @@ class Read():
         self.a=0
     def readResource(self):
         time.sleep(2)
-        print("\n=================================\nPrinting employee data...\n\n") #i have to create first everytime
+        print("\n=================================\nPrinting employee data...\n") #i have to create first everytime
         f = open('resourceData.json')
         data2 = json.load(f)
-        print("ID\t\tName\t\tOccupation\t\tSalary\t\tAge\t\tWork status\n")
-        for resource in data2["employee"]["name"]:
+        
+        for resource in data2:
             data2["employee"]["id"] = self.a    
-            print(str(data2["employee"]["id"])+'\t\t' + str(data2["employee"]["name"]) +'\t\t' + str(data2["employee"]["occupation"]) + '\t\t'+str(data2["employee"]["salary"]) + '\t\t'+str(data2["employee"]["age"]) + '\t\t'+str(data2["employee"]["workstatus"]) + "\n")
+            print("\nID: "+str(data2["employee"]["id"]))
+            print("\nName: "+str(data2["employee"]["name"]))
+            print("\nOccupation: "+str(data2["employee"]["occupation"]))
+            print("\nSalary: "+str(data2["employee"]["salary"]))
+            print("\nAge: "+str(data2["employee"]["age"]))
+            print("\nEmployment status: "+str(data2["employee"]["workstatus"]))
+            print("======================================================")
+            time.sleep(0.3)
             self.a += 1
-        time.sleep(7)
+        time.sleep(5) #16.3 exam study laws of recursion
+        self.a = 0
         f.close()
     
 class Delete:
