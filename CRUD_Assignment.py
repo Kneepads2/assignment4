@@ -1,12 +1,11 @@
 
-import json
 import time
-
+import csv
+import random
 
 data = {}
 #filewrite = open("resourceData.json","w")
 #filewrite.write("ID\t\tName\t\tOccupation\t\tSalary\t\tAge\t\tEmployment Status\t\t\n")
-fileread = open("resourceData.json","r")
 #filewrite.close()
 
 counter = 0
@@ -28,7 +27,7 @@ class Create:
         occupation = str(input("Enter the occupation of the employee: "))
         while True:
             try:
-                salary = int(input("Enter the salary of the employee: "))
+                salary = int(input("Enter the yearly salary of the employee: "))
                 if (salary < 0):
                     raise ValueError
                 else:
@@ -52,24 +51,29 @@ class Create:
             try:
                 workstatus = str(input("Is the employee a part-timer, full-timer, or a contractor? "))
                 if (workstatus.upper() == "FULLTIMER" or workstatus.upper() == "FULL" or workstatus.upper() == "FULL-TIMER"):
-                    workstatus = "Full-time\n"
+                    workstatus = "Full-time"
                     break
                 elif (workstatus.upper() == "PARTTIMER" or workstatus.upper() == "PART-TIMER" or workstatus.upper() == "PART"):
-                    workstatus = "Part-time\n"
+                    workstatus = "Part-time"
                     break
-                elif (workstatus.upper() == "CONTRACTOR"):
-                    workstatus = "Contractor\n"
+                elif (workstatus.upper() == "CONTRACTOR" or workstatus.upper() == "CON" or workstatus.upper() == "CONTRACT"):
+                    workstatus = "Contractor"
                     break
                 else:
                     raise ValueError
             except ValueError:
                 print("Please enter if they are a full-time, part-time or a contractor.\n")
-        id = 0
+        id = random.randint(1,100000)#creates a unique id number
         global data
-        data = {'employee':{'name':name,'occupation':occupation,'salary':salary,'age':age,'workstatus':workstatus,'id':id}}
+        data = [name,occupation,salary,age,workstatus,id]
         
-        with open ('resourceData.json','a') as f:
-            json.dump(data,f,indent = 2)
+        with open ('resourceData.csv','w',newline='') as f:
+            header = ['name','occupation','salary','age','work status']
+            writer = csv.writer(f)
+            writer.writerow(header)
+            writer.writerow(data)
+            f.close()
+            
             
             
         print("\nResource created. Sending you back to the main menu...\n======================================================")
@@ -78,24 +82,44 @@ class Create:
 class Read():
     def __init__(self):
         self.a=0
+        self.b=0
     def readResource(self):
         time.sleep(2)
         print("\n=================================\nPrinting employee data...\n") #i have to create first everytime
-        f = open('resourceData.json')
-        data2 = json.load(f)
+        f = open('resourceData.csv')
         
-        for resource in data2:
-            data2["employee"]["id"] = self.a    
-            print("\nID: "+str(data2["employee"]["id"]))
-            print("\nName: "+str(data2["employee"]["name"]))
-            print("\nOccupation: "+str(data2["employee"]["occupation"]))
-            print("\nSalary: "+str(data2["employee"]["salary"]))
-            print("\nAge: "+str(data2["employee"]["age"]))
-            print("\nEmployment status: "+str(data2["employee"]["workstatus"]))
-            print("======================================================")
-            time.sleep(0.3)
-            self.a += 1
-        time.sleep(5) #16.3 exam study laws of recursion
+        while True:
+            try:
+                searchUp = int(input("Which employee are you searching for? Enter their ID number: "))
+                break
+            except ValueError:
+                print("Please enter a valid ID number.")
+        
+        with open('resourceData.csv','r') as f:
+            #fieldnames2 = ['name','occupation','salary','age','workstatus','id']
+            csv_reader = csv.reader(f,delimiter=',')
+            next(csv_reader)
+            for resource in csv_reader:
+                
+                if ((f"{resource[5]}") == str(searchUp)):
+                    print("======================================================\n")
+                    print(f"Employee name: {resource[0]}")
+                    print(f"Employee occupation: {resource[1]}")
+                    print(f"Employee yearly salary: {resource[2]} CAD")
+                    print(f"Employee age: {resource[3]}")
+                    print(f"Employee work status: {resource[4]}")
+                    print(f"Employee ID number: {resource[5]}")
+                    self.a +=1
+                    print("\n======================================================\nReturning to main menu..")
+                else:
+                    print("...")
+                    #if (f"{resource[5]}" != searchUp):
+                        #print("Cannot find employee.") 
+                    self.a +=1
+                    
+                time.sleep(0.25)
+
+        time.sleep(3) #16.3 exam study laws of recursion
         self.a = 0
         f.close()
     
@@ -103,17 +127,7 @@ class Delete:
     def __init__(self):
         pass 
     def deleteResource(self):
-        employeeCode = int(input("Enter ID code of the employee: "))
-        while fileread.readline():
-            items = fileread.split()
-            if (items[0] == employeeCode):
-                del items[0]
-                del items[1]
-                del items[2]
-                del items[3]
-                del items[4]
-            else:
-                fileread = fileread.readline()
+        pass
         
 
 
