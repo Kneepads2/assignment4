@@ -69,8 +69,8 @@ class Create:
         data = {'employee':{'name':name,'occupation':occupation,'salary':salary,'age':age,'workstatus':workstatus,'id':id}}
         
         with open ('resourceData.json','a') as f:
-            json.dump(data,f)
-            f.write("\n")
+            json.dump(data,f,indent = 2)
+            
             
         print("\nResource created. Sending you back to the main menu...\n======================================================")
         time.sleep(2)
